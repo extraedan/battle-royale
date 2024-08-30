@@ -6,7 +6,7 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from models import db, Character
-
+from characters import Character
 # cCREATE FLASK SERVEr
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'dev'
@@ -34,12 +34,14 @@ def choose_characters():
             index = int(form.slot.data)
             name = form.name.data
 
+            # if nobody in slot, create a new character object
             if characters[index] is None:
-                characters[index] = {"name": name}
+                characters[index] = Character(name)
+            # if it already exists, just change the attribute
             else:
-                characters[index]["name"] = name
+                characters[index].name = name
 
-            # pass in the list of characters to check
+            # pass in the list of character objects to check
             return render_template("choose_characters.html", form=form, characters=characters)
 
     return render_template("choose_characters.html", form=form, characters=characters)

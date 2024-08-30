@@ -31,7 +31,7 @@
         <div class="col">
             <div class="card h-100 shadow-sm">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="card-title mb-0">{{ characters[c]["name"] }}</h5>
+                    <h5 class="card-title mb-0">{{ characters[c].name }}</h5>
                 </div>
                 {% set form = form %}
                     {% set _ = form.slot.process_data(c) %}
