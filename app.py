@@ -5,6 +5,7 @@ from forms import InputCharacter
 from flask_bootstrap import Bootstrap5
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from models import db, Character
 
 # cCREATE FLASK SERVEr
 app = Flask(__name__)
@@ -13,8 +14,9 @@ bootstrap = Bootstrap5(app)
 
 # CREATE DATABASE
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///battle_royale.db'
-db = SQLAlchemy(app)
+db.init_app(app)
 migrate = Migrate(app, db)
+
 
 
 @app.route('/')
