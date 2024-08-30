@@ -28,23 +28,23 @@ def home():
 
 @app.route('/create', methods=['GET', 'POST'])
 def choose_characters():
+    # //TODO Render each form separately
     form = InputCharacter()
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            index = int(form.slot.data)
-            name = form.name.data
-
-            # if nobody in slot, create a new character object
-            if characters[index] is None:
-                characters[index] = Character(name)
-            # if it already exists, just change the attribute
-            else:
-                characters[index].name = name
-
-            # pass in the list of character objects to check
-            return render_template("choose_characters.html", form=form, characters=characters)
-
+    if request.method == 'POST' and form.validate_on_submit():
+        create_edit_character(form)
     return render_template("choose_characters.html", form=form, characters=characters)
+
+
+def create_edit_character(form):
+    index = int(form.slot.data)
+    name = form.name.data
+
+    # if nobody in slot, create a new character object
+    if characters[index] is None:
+        characters[index] = Character(name)
+    # if it already exists, just change the attribute
+    else:
+        characters[index].name = name
 
 if __name__ == '__main__':
     app.run(debug=True)
