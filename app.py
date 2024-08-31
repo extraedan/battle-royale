@@ -12,18 +12,22 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'dev'
 bootstrap = Bootstrap(app)
 
-# CREATE LIST OF CHARACTER DICTIONARIES
-# Later I can make dynamic so multiple characters
+# //TODO: Create a function that generates list based on number of characters selected
+# Create list of character objects
+# We start with None so that the indexes already exist, acting as 'slots' for the character objects to fill in
 characters = [None, None, None, None]
 
 
+# //TODO: Create a game route that displays initial characters + events, the game loop, maybe in different file
 @app.route('/')
 def home():
     return render_template("index.html")
 
+# //TODO: Allow user to select number of characters, make everything dynamic
 @app.route('/create', methods=['GET', 'POST'])
 def choose_characters():
     # creates four forms
+    # //TODO: Make dynamic according to number
     forms = [InputCharacter() for _ in range(4)]
 
     # if one of the forms is valid, create/edit character and break
@@ -32,6 +36,7 @@ def choose_characters():
             if form.validate_on_submit():
                 create_edit_character(form)
                 return redirect(url_for('choose_characters'))
+    # //TODO: Update choose_characters.html to be dynamic according to number
     return render_template("choose_characters.html", forms=forms, characters=characters)
 
 
