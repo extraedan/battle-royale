@@ -11,18 +11,31 @@
 <div class="container py-5">
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
 
+        <!-- Going through every 'slot', in this case 4 -->
         {% for c in range(4) %}
-            <div class="col">
-                        <div class="card h-100 shadow-sm">
-                            <div class="card-header bg-primary text-white">
-                                <h5 class="card-title mb-0">Character {{ c + 1 }}</h5>
-                            </div>
-                            <div class="card-body">
-                                {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <!-- If the character exists, set header to name, otherwise Character Number -->
+                        {% if characters[c] %}
+                        {{ characters[c].name }}
+                        {% else %}
+                        Character {{ c + 1 }}
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Get the correct form from forms list we passed in -->
+                    {% set form = forms[c] %}
+                    <!-- Set hidden slot field to current slot number -->
+                    {% set _ = form.slot.process_data(c) %}
+
+                    {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
 
