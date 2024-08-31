@@ -7,3 +7,6 @@ class InputCharacter(FlaskForm):
     name = StringField("Character Name", validators=[DataRequired()])
     slot = HiddenField('Slot')
     submit = SubmitField("Add character")
+
+class NextEvent(FlaskForm):
+    submit = SubmitField("Next event")

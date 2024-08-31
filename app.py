@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from sqlalchemy.orm import DeclarativeBase
 
-from forms import InputCharacter
+from forms import InputCharacter, NextEvent
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -19,6 +19,12 @@ characters = [None, None, None, None]
 
 
 # //TODO: Create a game route that displays initial characters + events, the game loop, maybe in different file
+
+@app.route('/game', methods=['GET', 'POST'])
+def play():
+    form = NextEvent()
+    return render_template("game.html", characters=characters, form=form)
+
 @app.route('/')
 def home():
     return render_template("index.html")

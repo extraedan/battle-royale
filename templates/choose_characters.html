@@ -1,7 +1,7 @@
 {% include "header.html" %}
+{% from "bootstrap5/form.html" import render_form %}
 
 <body>
-
 <div class="container py-5">
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
 
@@ -30,6 +30,15 @@
             </div>
         </div>
         {% endfor %}
+
+        <!-- Add the "Start Simulation" button -->
+    <div class="row mt-4">
+        <div class="col text-center">
+            <a href="{{ url_for('play') }}" class="btn btn-lg btn-success">Start Simulation</a>
+        </div>
+    </div>
+</div>
+
     </div>
 </div>
 
