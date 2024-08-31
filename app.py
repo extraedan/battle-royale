@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
-from sqlalchemy.orm import DeclarativeBase
 
 from forms import InputCharacter, NextEvent
 from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+
 from characters import Character
+from events import events_single, events_double
+import random
 
 # Create Flask Server
 app = Flask(__name__)
@@ -18,10 +18,23 @@ bootstrap = Bootstrap(app)
 characters = [None, None, None, None]
 
 
-# //TODO: Create a game route that displays initial characters + events, the game loop, maybe in different file
+def generate_event():
+    events = []
+    for character in characters:
+        char_a = character.name
+        raw_event = random.choice(events_single)
+        event = f"{raw_event}".format(char_a=char_a)
+        events.append(event)
+    return events
+
+
 
 @app.route('/game', methods=['GET', 'POST'])
 def play():
+    if request.method == 'POST':
+        form = NextEvent
+        events = generate_event()
+        return render_template("event.html", form=form, events=events)
     form = NextEvent()
     return render_template("game.html", characters=characters, form=form)
 
