@@ -5,17 +5,12 @@ from forms import InputCharacter
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from models import db, Character
 from characters import Character
-# cCREATE FLASK SERVEr
+
+# Create Flask Server
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'dev'
 bootstrap = Bootstrap(app)
-
-# CREATE DATABASE
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///battle_royale.db'
-db.init_app(app)
-migrate = Migrate(app, db)
 
 # CREATE LIST OF CHARACTER DICTIONARIES
 # Later I can make dynamic so multiple characters
