@@ -1,14 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for
-
 from forms import InputCharacter, NextEvent
 from flask_bootstrap import Bootstrap
-
 from characters import Character
 from events import events_single, events_double
 import random
-
-import logging
-logging.basicConfig(level=logging.DEBUG)
 
 # Create Flask Server
 app = Flask(__name__)
@@ -22,6 +17,7 @@ characters = [None, None, None, None]
 
 
 def generate_event():
+    """Returns a list of randomly generated event strings"""
     events = []
     for character in characters:
         # 50% chance something happens to the character
@@ -33,6 +29,7 @@ def generate_event():
                 raw_event = random.choice(events_single)
                 event = f"{raw_event}".format(char_a=char_a)
                 events.append(event)
+
             # double event
             else:
                 # makes sure character b and character a are not the same
@@ -43,10 +40,9 @@ def generate_event():
                 events.append(event)
     return events
 
-
-
 @app.route('/game', methods=['GET', 'POST'])
 def play():
+    """On get displays a list of remaining characters, on post displays a list of events"""
     if request.method == 'POST':
         form = NextEvent()
         events = generate_event()
@@ -56,7 +52,6 @@ def play():
 
 @app.route('/')
 def home():
-    logging.debug("This is a debug message.")
     return render_template("index.html")
 
 # //TODO: Allow user to select number of characters, make everything dynamic
@@ -84,6 +79,7 @@ def create_edit_character(form):
     # if nobody in slot, create a new character object
     if characters[index] is None:
         characters[index] = Character(name)
+
     # if it already exists, just change the attribute
     else:
         characters[index].name = name
