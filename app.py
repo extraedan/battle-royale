@@ -7,6 +7,9 @@ from characters import Character
 from events import events_single, events_double
 import random
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
 # Create Flask Server
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'dev'
@@ -21,10 +24,23 @@ characters = [None, None, None, None]
 def generate_event():
     events = []
     for character in characters:
-        char_a = character.name
-        raw_event = random.choice(events_single)
-        event = f"{raw_event}".format(char_a=char_a)
-        events.append(event)
+        # 50% chance something happens to the character
+        if random.choice([True, False]):
+            char_a = character.name
+
+            # decides if single or double event
+            if random.choice([True, False]):
+                raw_event = random.choice(events_single)
+                event = f"{raw_event}".format(char_a=char_a)
+                events.append(event)
+            # double event
+            else:
+                # makes sure character b and character a are not the same
+                chars_pool = [char for char in characters if char.name != char_a]
+                char_b = random.choice(chars_pool).name
+                raw_event = random.choice(events_double)
+                event = f"{raw_event}".format(char_a=char_a, char_b=char_b)
+                events.append(event)
     return events
 
 
@@ -40,6 +56,7 @@ def play():
 
 @app.route('/')
 def home():
+    logging.debug("This is a debug message.")
     return render_template("index.html")
 
 # //TODO: Allow user to select number of characters, make everything dynamic
