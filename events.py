@@ -1,7 +1,7 @@
 class Event:
-    def __init__(self, text, numeric_input, death_num = 0):
+    def __init__(self, text, character_count, death_num = 0):
         self.text = text
-        self.numeric_input = int(numeric_input)  # single or double or triple event etc
+        self.char_count = int(character_count)  # single or double or triple event etc
         # decides which character mentioned in the event dies, 0 is nobody, 1 is first, 2 is second etc
         self.death_num = death_num
 
@@ -35,4 +35,3 @@ events = [
     Event("{char_a} and {char_b} were forced to flee from mutant creatures", 2),
     Event("{char_a} tricked {char_b} into eating poisoned food", 2, 2)
 ]
-
