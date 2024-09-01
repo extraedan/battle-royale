@@ -48,7 +48,7 @@ def generate_event():
 @app.route('/game', methods=['GET', 'POST'])
 def play():
     if request.method == 'POST':
-        form = NextEvent
+        form = NextEvent()
         events = generate_event()
         return render_template("event.html", form=form, events=events)
     form = NextEvent()
