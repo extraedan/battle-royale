@@ -4,41 +4,39 @@
 <body>
 <div class="container py-5">
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-
         <!-- Going through every 'slot', in this case 4 -->
-        {% for c in range(4) %}
+        {% for c_num in range(4) %}
         <div class="col">
-            <div class="card h-100 shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="card-title mb-0">
-                        <!-- If the character exists, set header to name, otherwise Character Number -->
-                        {% if characters[c] %}
-                        {{ characters[c].name }}
-                        {% else %}
-                        Character {{ c + 1 }}
-                        {% endif %}
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <!-- Get the correct form from forms list we passed in -->
-                    {% set form = forms[c] %}
-                    <!-- Set hidden slot field to current slot number -->
-                    {% set _ = form.slot.process_data(c) %}
+            <div class="card h-100 shadow-sm rounded border-0">
+
+                <div class="card-body p-4">
+                    <!-- Display proper form iteration according to character -->
+                    {% set form = forms[c_num] %}
+                    <!-- Display proper form iteration according to character -->
+                    {% set _ = form.slot.process_data(c_num) %}
+
+                    <!-- If there is a character -->
+                    {% if characters[c_num] %}
+                    <!-- set the name label form to the character's name -->
+                    {{ form.name.label(text=characters[c_num].name) }}
+
+                    <!-- Otherwise make it character's index + 1 for character number-->
+                    {% else %}
+                    {{ form.name.label(text='Character ' ~ (c_num + 1)) }}
+                    {% endif %}
 
                     {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
                 </div>
             </div>
         </div>
         {% endfor %}
+    </div>
 
-        <!-- Add the "Start Simulation" button -->
+    <!-- Add the "Start Simulation" button -->
     <div class="row mt-4">
         <div class="col text-center">
-            <a href="{{ url_for('play') }}" class="btn btn-lg btn-success">Start Simulation</a>
+            <a href="{{ url_for('play') }}" class="btn btn-lg btn-success mt-3">Start Simulation</a>
         </div>
-    </div>
-</div>
-
     </div>
 </div>
 
