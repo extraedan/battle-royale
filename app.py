@@ -1,11 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for
-from sqlalchemy.orm import DeclarativeBase
-
-from forms import InputCharacter
+from forms import InputCharacter, NextEvent
 from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from characters import Character
+from events import events
+import random
 
 # Create Flask Server
 app = Flask(__name__)
@@ -18,7 +16,61 @@ bootstrap = Bootstrap(app)
 characters = [None, None, None, None]
 
 
-# //TODO: Create a game route that displays initial characters + events, the game loop, maybe in different file
+def generate_event():
+    """Returns a list of randomly generated event strings"""
+    current_events = []
+    for character in characters:
+        # 50% chance something happens to the character
+        if random.choice([True, False]):
+            char_a = character.name
+
+            # chooses random event object
+            event = random.choice(events)
+            print(event)
+            print(event.text)
+            print(event.char_count)
+
+            # if single event
+            if event.char_count == 1:
+
+                # if death event, remove character object from pool
+                if event.death_num == 1:
+                    characters.remove(character)
+                # reformats the text
+                event = f"{event.text}".format(char_a=char_a)
+                current_events.append(event)
+
+            # if double event
+            elif event.char_count == 2:
+                # makes sure character b and character a are not the same
+                chars_pool = [char for char in characters if char.name != char_a]
+                char_b = random.choice(chars_pool)
+
+                # removes proper character object if death event
+                if event.death_num == 1:
+                    characters.remove(character)
+                elif event.death_num == 2:
+                    characters.remove(char_b)
+
+                event = f"{event.text}".format(char_a=char_a, char_b=char_b.name)
+                current_events.append(event)
+
+
+    return current_events
+
+@app.route('/game', methods=['GET', 'POST'])
+def play():
+    """On get displays a list of remaining characters, on post displays a list of events"""
+    form = NextEvent()
+    if request.method == 'POST':
+        # check if winner, if so render winner
+        if len(characters) == 1:
+            return render_template("winner.html", form=form, winner=characters[0].name)
+        events = generate_event()
+        return render_template("event.html", form=form, events=events)
+    form = NextEvent()
+    return render_template("game.html", characters=characters, form=form)
+
 @app.route('/')
 def home():
     return render_template("index.html")
@@ -48,6 +100,7 @@ def create_edit_character(form):
     # if nobody in slot, create a new character object
     if characters[index] is None:
         characters[index] = Character(name)
+
     # if it already exists, just change the attribute
     else:
         characters[index].name = name
