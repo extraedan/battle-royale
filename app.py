@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from forms import InputCharacter, NextEvent
 from flask_bootstrap import Bootstrap
 from characters import Character
-from events import events_single, events_double
+from events import events
 import random
 
 # Create Flask Server
@@ -18,27 +18,32 @@ characters = [None, None, None, None]
 
 def generate_event():
     """Returns a list of randomly generated event strings"""
-    events = []
+    current_events = []
     for character in characters:
         # 50% chance something happens to the character
         if random.choice([True, False]):
             char_a = character.name
 
-            # decides if single or double event
-            if random.choice([True, False]):
-                raw_event = random.choice(events_single)
-                event = f"{raw_event}".format(char_a=char_a)
-                events.append(event)
+            # chooses random event object
+            event = random.choice(events)
+            print(event)
+            print(event.text)
+            print(event.char_count)
 
-            # double event
-            else:
+            # if single event
+            if event.char_count == 1:
+                # reformats the text
+                event = f"{event.text}".format(char_a=char_a)
+                current_events.append(event)
+
+            # if double event
+            elif event.char_count == 2:
                 # makes sure character b and character a are not the same
                 chars_pool = [char for char in characters if char.name != char_a]
                 char_b = random.choice(chars_pool).name
-                raw_event = random.choice(events_double)
-                event = f"{raw_event}".format(char_a=char_a, char_b=char_b)
-                events.append(event)
-    return events
+                event = f"{event.text}".format(char_a=char_a, char_b=char_b)
+                current_events.append(event)
+    return current_events
 
 @app.route('/game', methods=['GET', 'POST'])
 def play():
