@@ -1,32 +1,32 @@
 {% include "header.html" %}
 {% from "bootstrap5/form.html" import render_form %}
 
-<body>
+<body class="bg-primary text-primary"> <!-- Use primary background and text color -->
 <div class="container py-5">
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
         <!-- Going through every 'slot', in this case 4 -->
         {% for c_num in range(4) %}
         <div class="col">
-            <div class="card h-100 shadow-sm rounded border bg-light">
+                <div class="card h-100 shadow-sm rounded border-secondary bg-secondary text-light"> <!-- Adjusted card styles -->
 
-                <div class="card-body p-4">
-                    <!-- Display proper form iteration according to character -->
-                    {% set form = forms[c_num] %}
-                    <!-- Display proper form iteration according to character -->
-                    {% set _ = form.slot.process_data(c_num) %}
+                    <div class="card-body p-4">
+                        <!-- Display proper form iteration according to character -->
+                        {% set form = forms[c_num] %}
+                        <!-- Display proper form iteration according to character -->
+                        {% set _ = form.slot.process_data(c_num) %}
 
-                    <!-- If there is a character -->
-                    {% if characters[c_num] %}
-                    <!-- set the name label form to the character's name -->
-                    {{ form.name.label(text=characters[c_num].name) }}
+                        <!-- If there is a character -->
+                        {% if characters[c_num] %}
+                        <!-- set the name label form to the character's name -->
+                        <h2> {{ form.name.label(text=characters[c_num].name) }} </h2>
 
-                    <!-- Otherwise make it character's index + 1 for character number-->
-                    {% else %}
-                    {{ form.name.label(text='Character ' ~ (c_num + 1)) }}
-                    {% endif %}
+                        <!-- Otherwise make it character's index + 1 for character number-->
+                        {% else %}
+                        <h2> {{ form.name.label(text='Character ' ~ (c_num + 1)) }} </h2>
+                        {% endif %}
 
-                    {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
-                </div>
+                        {{ render_form(form, novalidate=True, button_map={"submit": "tertiary"}) }} <!-- Adjusted button class to use tertiary style -->
+                    </div>
             </div>
         </div>
         {% endfor %}
@@ -35,7 +35,7 @@
     <!-- Add the "Start Simulation" button -->
     <div class="row mt-4">
         <div class="col text-center">
-            <a href="{{ url_for('play') }}" class="btn btn-lg btn-success mt-3">Start Simulation</a>
+            <a href="{{ url_for('play') }}" class="btn btn-lg btn-primary mt-3">Start Simulation</a> <!-- Use primary button style -->
         </div>
     </div>
 </div>
