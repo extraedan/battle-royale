@@ -81,15 +81,3 @@ def update_characters(char_a, char_b, output):
         char_b.last_event = output["updates"][char_b.name]["LastEvent"]
         char_b.items = output["updates"][char_b.name]["Items"]
         char_b.death = output["updates"][char_b.name]["Death"]
-
-
-
-# extract the text from the response
-# claude_output = send_message().content[0].text
-# event_data = json.loads(claude_output)
-# print(event_data)
-# print(event_data["event"])
-# print(f"{char_a}'s health: {event_data['updates'][char_a]['Health']}")
-# print(f"{char_b}'s health: {event_data['updates'][char_b]['Health']}")
-# print(f"{char_a}'s last event: {event_data['updates'][char_a]['LastEvent']}")
-# print(f"{char_b}'s last event: {event_data['updates'][char_b]['LastEvent']}")

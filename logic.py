@@ -38,3 +38,6 @@ def create_edit_character(form):
     # if it already exists, just change the attribute
     else:
         characters[index].name = name
+
+def get_characters():
+    return characters
