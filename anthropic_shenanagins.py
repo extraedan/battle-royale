@@ -17,7 +17,7 @@ client = anthropic.Anthropic(api_key= api_key)
 
 #// TODO: 50/50 shot it's a double, if it is a double then char_b no longer gets an event
 system_prompt = ('generate a 1-2 sentence unique and creative Battle Royale event for the focus character, consider their status, last event, and items.'
-                 'Include the scene character if provided. Provide only the output, in json format as shown below'
+                 'Include the scene character if provided. 50% chance of somebody dying. Provide only the output, in json format as shown below'
                  'Input: Focus: [Name, Status, LastEvent, Items] Scene: [Name, Status, LastEvent, Items]'
                  'Output:{ "event": "Event description", "updates":{ '
                  '"CharacterName": {"Status": "string", "LastEvent": "string",'
@@ -71,16 +71,12 @@ def send_message(input_message):
 
 def update_characters(char_a, char_b, output):
     """Updates character attributes with new values"""
-    print(char_a.status)
-    print(char_a.death)
     char_a.status = output["updates"][char_a.name]["Status"]
     char_a.last_event = output["updates"][char_a.name]["LastEvent"]
     char_a.items = output["updates"][char_a.name]["Items"]
     char_a.death = output["updates"][char_a.name]["Death"]
-    print(char_a.status)
-    print(char_a.death)
 
-    if char_b != None:
+    if char_b is not None:
         char_b.status = output["updates"][char_b.name]["Status"]
         char_b.last_event = output["updates"][char_b.name]["LastEvent"]
         char_b.items = output["updates"][char_b.name]["Items"]

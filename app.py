@@ -18,26 +18,26 @@ characters = [None, None, None, None]
 
 
 def generate_event():
-    print("You have entered generate event function")
     # each round, make a list of living characters
     events_to_display = []
     character_pool = [character for character in characters if character.death == False]
-    print(character_pool)
 
     # go through each character in the pool
-    print("You are starting to iterate")
-    for character in character_pool:
-        print("working step 1")
+    print("You are starting events")
+    hi = [c.name for c in character_pool]
+    print(f"Current character Pool: {hi}")
+
+    while character_pool:
         # define and remove from pool char_a
-        char_a = character
+        char_a = character_pool.pop(0)
         char_b = None # default value for char_b unless overridden
-        character_pool.remove(char_a)
+        hi =  [c.name for c in character_pool ]
 
         # 50% chance another character is involved
         # define and remove from pool char_b
-        if random.choice([True, False]) and len(character_pool) > 1:
+        if random.choice([True, False]) and len(character_pool) > 0:
             char_b = random.choice(character_pool)
-            character_pool.remove(char_b)
+            character_pool.remove(char_b)  # Remove char_b from the pool
 
         # create input message
         input_message = create_input_message(char_a, char_b)
@@ -50,7 +50,7 @@ def generate_event():
 
         # update the character attributes
         update_characters(char_a, char_b, output)
-
+        print(f"Current character Pool: {[c.name for c in character_pool]}")
     return events_to_display
 
 @app.route('/game', methods=['GET', 'POST'])
