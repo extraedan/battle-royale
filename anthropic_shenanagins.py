@@ -18,9 +18,9 @@ client = anthropic.Anthropic(api_key= api_key)
 #// TODO: 50/50 shot it's a double, if it is a double then char_b no longer gets an event
 system_prompt = ('generate a 1-2 sentence unique and creative Battle Royale event for the focus character, consider their status, last event, and items.'
                  'Include the scene character if provided. Provide only the output, in json format'
-                 'Input: Focus: [Name, Health, LastEvent, Items] Scene: [Name, Health, LastEvent, Items]'
+                 'Input: Focus: [Name, Status, LastEvent, Items] Scene: [Name, Status, LastEvent, Items]'
                  'Output:{ "event": "Event description", "updates":{ '
-                 '"CharacterName": {"Health": int, "LastEvent": "string",'
+                 '"CharacterName": {"Status": "string", "LastEvent": "string",'
                  '"Items":[list], "Death": boolean}, ... } }')
 
 # claude_input = ('Input:'
@@ -46,8 +46,8 @@ def create_input_message(char_a, char_b):
 
 # creating message to send
 def send_message(input_message):
-        """Sends input to language model and returns the output object"""
-        return client.messages.create(
+        """Sends input to language model and returns the output as a json"""
+        raw_output =  client.messages.create(
                     model="claude-3-haiku-20240307",
                     max_tokens=1000,
                     temperature=0,
@@ -65,12 +65,25 @@ def send_message(input_message):
                     ]
                 )
 
-def process_output(output):
-    """Returns event message and updates attributes of character objects"""
-    # extract text from output response
-    print(output)
-    output_data = json.loads(output)
-    return output_data["event"]
+        output_data = json.loads(raw_output)
+        return output_data
+
+
+def update_characters(char_a, char_b, output):
+    """Updates character attributes with new values"""
+    char_a.status = output["updates"][char_a.name]["Status"]
+    char_a.last_event = output["updates"][char_a.name]["LastEvent"]
+    char_a.items = output["updates"][char_a.name]["Items"]
+    char_a.death = output["updates"][char_a.name]["Death"]
+
+    if char_b != None:
+        char_b.status = output["updates"][char_b.name]["Status"]
+        char_b.last_event = output["updates"][char_b.name]["LastEvent"]
+        char_b.items = output["updates"][char_b.name]["Items"]
+        char_b.death = output["updates"][char_b.name]["Death"]
+
+
+
 # extract the text from the response
 # claude_output = send_message().content[0].text
 # event_data = json.loads(claude_output)
