@@ -3,6 +3,7 @@ from forms import InputCharacter, NextEvent
 from flask_bootstrap import Bootstrap
 from characters import Character
 from events import events
+from anthropic_shenanagins import create_input_message, send_message, update_characters
 import random
 
 # Create Flask Server
@@ -17,46 +18,40 @@ characters = [None, None, None, None]
 
 
 def generate_event():
-    """Returns a list of randomly generated event strings"""
-    current_events = []
-    for character in characters:
-        # 50% chance something happens to the character
-        if random.choice([True, False]):
-            char_a = character.name
+    # each round, make a list of living characters
+    events_to_display = []
+    character_pool = [character for character in characters if character.death == False]
 
-            # chooses random event object
-            event = random.choice(events)
-            print(event)
-            print(event.text)
-            print(event.char_count)
+    # go through each character in the pool
+    print("You are starting events")
+    hi = [c.name for c in character_pool]
+    print(f"Current character Pool: {hi}")
 
-            # if single event
-            if event.char_count == 1:
+    while character_pool:
+        # define and remove from pool char_a
+        char_a = character_pool.pop(0)
+        char_b = None # default value for char_b unless overridden
+        hi =  [c.name for c in character_pool ]
 
-                # if death event, remove character object from pool
-                if event.death_num == 1:
-                    characters.remove(character)
-                # reformats the text
-                event = f"{event.text}".format(char_a=char_a)
-                current_events.append(event)
+        # 50% chance another character is involved
+        # define and remove from pool char_b
+        if random.choice([True, False]) and len(character_pool) > 0:
+            char_b = random.choice(character_pool)
+            character_pool.remove(char_b)  # Remove char_b from the pool
 
-            # if double event
-            elif event.char_count == 2:
-                # makes sure character b and character a are not the same
-                chars_pool = [char for char in characters if char.name != char_a]
-                char_b = random.choice(chars_pool)
+        # create input message
+        input_message = create_input_message(char_a, char_b)
 
-                # removes proper character object if death event
-                if event.death_num == 1:
-                    characters.remove(character)
-                elif event.death_num == 2:
-                    characters.remove(char_b)
+        # get output message and convert to json, then append to list
+        output = send_message(input_message)
+        print(output)
+        event = output["event"]
+        events_to_display.append(event)
 
-                event = f"{event.text}".format(char_a=char_a, char_b=char_b.name)
-                current_events.append(event)
-
-
-    return current_events
+        # update the character attributes
+        update_characters(char_a, char_b, output)
+        print(f"Current character Pool: {[c.name for c in character_pool]}")
+    return events_to_display
 
 @app.route('/game', methods=['GET', 'POST'])
 def play():
@@ -66,9 +61,9 @@ def play():
         # check if winner, if so render winner
         if len(characters) == 1:
             return render_template("winner.html", form=form, winner=characters[0].name)
-        events = generate_event()
-        return render_template("event.html", form=form, events=events)
-    form = NextEvent()
+        print ("helloooo")
+        displayed_events = generate_event()
+        return render_template("event.html", form=form, events=displayed_events)
     return render_template("game.html", characters=characters, form=form)
 
 @app.route('/')
