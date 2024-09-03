@@ -5,6 +5,7 @@ import random
 characters = [None, None, None, None]
 
 
+
 def generate_event():
     events_to_display = []
     character_pool = [character for character in characters if character.death == False]
@@ -27,17 +28,19 @@ def generate_event():
     return events_to_display
 
 def create_edit_character(form):
-    """Creates a new character object or changes the name of an existing character object"""
-    index = int(form.slot.data)
-    name = form.name.data
+    """Processes form input to create a new character or edit an existing one based on the slot number."""
 
-    # if nobody in slot, create a new character object
-    if characters[index] is None:
-        characters[index] = Character(name)
+    index = int(form.slot.data) # get the character slot from the form
+    name = form.name.data # get the character name from the form
 
-    # if it already exists, just change the attribute
+    # Creating new characters
+    if characters[index] is None: # if no character is in that slot
+        characters[index] = Character(name, index) # make a new character, passing in name and slot ID
+
+    # Edit character name if it already exists
     else:
         characters[index].name = name
 
 def get_characters():
     return characters
+g

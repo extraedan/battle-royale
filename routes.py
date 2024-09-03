@@ -22,17 +22,19 @@ def init_routes(app):
 
     @app.route('/create', methods=['GET', 'POST'])
     def choose_characters():
-        # TODO: Allow user to select number of characters, make everything dynamic
-        # TODO: Make dynamic according to number
-        forms = [InputCharacter() for _ in range(4)]
-        characters = get_characters()
+        """Handle character creation and editing."""
+        forms = [InputCharacter() for _ in range(4)]  # Create the forms
+        character_to_render = get_characters()  # Fetch the character list
 
+        # Handle form submission
         if request.method == 'POST':
             for form in forms:
                 if form.validate_on_submit():
-                    create_edit_character(form)
-                    return redirect(url_for('choose_characters'))
-        # TODO: Update choose_characters.html to be dynamic according to number
+                    create_edit_character(form)  # Create or edit character that was submitted
+            return redirect(url_for('choose_characters'))  # Redirect after processing all forms
+
+        # Render the form page for a GET request
         return render_template("choose_characters.html", forms=forms, characters=characters)
+
 
     return app
