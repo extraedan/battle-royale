@@ -1,0 +1,87 @@
+/* ---------- /FONTS/ ---------- */
+
+.card {
+  transition: transform 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-5px);
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+h1{
+     font-family: 'Bungee Shade', cursive;
+    font-weight: 700;
+}
+
+h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', sans-serif;
+}
+
+.card-body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.btn {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+
+/* ---------- /COLORS/ ---------- */
+
+/* Custom Bootstrap Color Overrides */
+
+/* Primary Background - Dark Red */
+body,
+.bg-primary {
+    background-color: #800000 !important;
+    color: #F2E8C6 !important; /* Use light cream for text on dark red background */
+}
+
+/* Primary Text and Buttons - Light Cream */
+.text-primary,
+.btn-primary {
+    color: #800000 !important;
+    background-color: #F2E8C6 !important;
+    border-color: #F2E8C6 !important;
+}
+
+/* Secondary Elements - Red */
+.text-secondary,
+.btn-secondary,
+.bg-secondary {
+    color: #F2E8C6 !important; /* Light cream for text on red background */
+    background-color: #982B1C !important;
+    border-color: #982B1C !important;
+}
+
+/* Tertiary Elements - Beige */
+.text-tertiary,
+.btn-tertiary,
+.bg-tertiary {
+    color: #800000 !important; /* Dark red for text on beige background */
+    background-color: #DAD4B5 !important;
+    border-color: #DAD4B5 !important;
+}
+
+/* Alerts and Notifications */
+.alert-primary {
+    background-color: #DAD4B5 !important; /* Beige */
+    color: #800000 !important; /* Dark red text */
+}
+
+.alert-secondary {
+    background-color: #F2E8C6 !important; /* Light cream */
+    color: #800000 !important; /* Dark red text */
+}
+
+/* Links */
+a {
+    color: #F2E8C6; /* Light cream for links */
+}
+
+a:hover {
+    color: #DAD4B5; /* Beige on hover */
+}
