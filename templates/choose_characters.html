@@ -1,46 +1,58 @@
 {% include "header.html" %}
 {% from "bootstrap5/form.html" import render_form %}
 
-<body>
+<body class="bg-primary text-primary"> <!-- Use primary background and text color -->
 <div class="container py-5">
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-
-        <!-- Going through every 'slot', in this case 4 -->
-        {% for c in range(4) %}
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="card-title mb-0">
-                        <!-- If the character exists, set header to name, otherwise Character Number -->
-                        {% if characters[c] %}
-                        {{ characters[c].name }}
-                        {% else %}
-                        Character {{ c + 1 }}
-                        {% endif %}
-                    </h5>
-                </div>
+        <!-- Basic text -->
+      <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-secondary text-light text-center">
                 <div class="card-body">
-                    <!-- Get the correct form from forms list we passed in -->
-                    {% set form = forms[c] %}
-                    <!-- Set hidden slot field to current slot number -->
-                    {% set _ = form.slot.process_data(c) %}
-
-                    {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+                    <h3 class="mb-0">Add your characters:</h3>
                 </div>
             </div>
         </div>
-        {% endfor %}
+    </div>
 
-        <!-- Add the "Start Simulation" button -->
+
+
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        <!-- Going through every 'slot', in this case 4 -->
+        {% for c_num in range(4) %}
+        <div class="col">
+                <div class="card h-100 shadow-sm rounded border-secondary bg-secondary text-light d-flex justify-content-center align-items-center">
+                    <div class="card-body p-4 text-center">
+                        <!-- Display proper form iteration according to character -->
+                        {% set form = forms[c_num] %}
+                        <!-- Display proper form iteration according to character -->
+                        {% set _ = form.slot.process_data(c_num) %}
+
+                        <!-- If there is a character -->
+                        {% if characters[c_num] %}
+                        <!-- set the name label form to the character's name -->
+                        <h2> {{ form.name.label(text=characters[c_num].name) }} </h2>
+
+                        <!-- Otherwise make it character's index + 1 for character number-->
+                        {% else %}
+                        <h2> {{ form.name.label(text='Character ' ~ (c_num + 1)) }} </h2>
+                        {% endif %}
+
+                        {{ render_form(form, novalidate=True, button_map={"submit": "tertiary mt-2"}) }}  <!-- Adjusted button class to use tertiary style -->
+                    </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Add the "Start Simulation" button -->
     <div class="row mt-4">
         <div class="col text-center">
-            <a href="{{ url_for('play') }}" class="btn btn-lg btn-success">Start Simulation</a>
+            <a href="{{ url_for('play') }}" class="btn btn-lg btn-secondary mt-3 btn-block">Start Simulation</a> <!-- Use primary button style -->
         </div>
     </div>
 </div>
 
-    </div>
-</div>
-
+<script src="{{ url_for('static', filename='form-persistence.js') }}"></script>
 </body>
 </html>

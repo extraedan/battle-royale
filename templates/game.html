@@ -1,34 +1,45 @@
 {% include "header.html" %}
 {% from "bootstrap5/form.html" import render_form %}
 
-<body>
+<body class="bg-primary text-primary">
 <div class="container py-5">
+    <!-- Basic text -->
+      <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-secondary text-light text-center">
+                <div class="card-body">
+                    <h3 class="mb-0">Characters In The Battle:</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Displays each characterv -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
     {% for c in characters %}
     <div class="col">
-        <div class="card h-100 shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h5 class="card-title mb-0">
-                    {{ c.name }}
-                </h5>
-            </div>
-            <div class="card-body">
+        <div class="card h-100 shadow-sm rounded border-secondary bg-secondary text-light d-flex justify-content-center align-items-center">
+            <div class="card-body p-4 text-center">
+                <h2>{{ c.name }}</h2>
                 <!-- Add more character details here if needed -->
             </div>
         </div>
     </div>
     {% endfor %}
-</div>
+    </div>
 
-<div class="row mt-4">
-    <div class="col">
-        <div class="card">
-            <div class="card-body">
-                {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+    <div class="row mt-4">
+        <div class="col">
+            <div class="card bg-secondary text-light">
+                <div class="card-body">
+                    <div class="col text-center">
+                    {{ render_form(form, novalidate=True, button_map={"submit": "tertiary mt-2"}) }}
+                        </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>
