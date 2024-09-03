@@ -3,7 +3,7 @@ from forms import InputCharacter, NextEvent
 from flask_bootstrap import Bootstrap
 from characters import Character
 from events import events
-from anthropic_shenanagins import create_input_message, send_message, process_output, update_characters
+from anthropic_shenanagins import create_input_message, send_message, update_characters
 import random
 
 # Create Flask Server
@@ -21,7 +21,7 @@ def generate_event():
     print("You have entered generate event function")
     # each round, make a list of living characters
     events_to_display = []
-    character_pool = [character for character in characters if character.death == 0]
+    character_pool = [character for character in characters if character.death == False]
     print(character_pool)
 
     # go through each character in the pool
@@ -41,12 +41,15 @@ def generate_event():
 
         # create input message
         input_message = create_input_message(char_a, char_b)
-        output = send_message(input_message).content[0].text
+
+        # get output message and convert to json, then append to list
+        output = send_message(input_message)
+        print(output)
         event = output["event"]
+        events_to_display.append(event)
+
+        # update the character attributes
         update_characters(char_a, char_b, output)
-
-
-
 
     return events_to_display
 
@@ -59,9 +62,8 @@ def play():
         if len(characters) == 1:
             return render_template("winner.html", form=form, winner=characters[0].name)
         print ("helloooo")
-        generate_event()
-        return render_template("event.html", form=form, events=events)
-    form = NextEvent()
+        displayed_events = generate_event()
+        return render_template("event.html", form=form, events=displayed_events)
     return render_template("game.html", characters=characters, form=form)
 
 @app.route('/')

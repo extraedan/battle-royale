@@ -6,4 +6,4 @@ class Character:
         self.status = "healthy"
         self.last_event = "started battle royale"
         self.items = []
-        self.death = 0
+        self.death = False
