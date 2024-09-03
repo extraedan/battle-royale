@@ -1,30 +1,45 @@
 {% include "header.html" %}
 {% from "bootstrap5/form.html" import render_form %}
 
-<body>
-    <div class="container mt-5">
-        <h1 class="mb-4">Stuff that happened this turn</h1>
+<body class="bg-primary text-primary">
+    <div class="container py-5">
+
+            <!-- Basic text -->
+      <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-secondary text-light text-center">
+                <div class="card-body">
+                    <h3 class="mb-0">Events this turn</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             {% for event in events %}
                 <div class="col">
-                    <div class="card">
-                        <div class="card-body">
+                    <div class="card h-100 shadow-sm rounded border-secondary bg-secondary text-light">
+                        <div class="card-body p-4 text-center">
                             <h5 class="card-title">{{ event }}</h5>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
-    </div>
-<div class="row mt-4">
-    <div class="col">
-        <div class="card">
-            <div class="card-body">
-                {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+
+        <div class="row mt-4">
+            <div class="col">
+                <div class="card bg-secondary text-light">
+                    <div class="card-body">
+                        <div class="col text-center">
+                        {{ render_form(form, novalidate=True, button_map={"submit": "tertiary mt-2"}) }}
+                            </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
