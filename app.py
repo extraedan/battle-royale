@@ -4,6 +4,7 @@ from flask_bootstrap import Bootstrap
 from characters import Character
 from events import events
 from anthropic_shenanagins import create_input_message, send_message, update_characters
+from logic import generate_event, create_edit_character
 import random
 
 # Create Flask Server
@@ -14,55 +15,15 @@ bootstrap = Bootstrap(app)
 # //TODO: Create a function that generates list based on number of characters selected
 # Create list of character objects
 # We start with None so that the indexes already exist, acting as 'slots' for the character objects to fill in
-characters = [None, None, None, None]
-
-
-def generate_event():
-    # each round, make a list of living characters
-    events_to_display = []
-    character_pool = [character for character in characters if character.death == False]
-
-    # go through each character in the pool
-    print("You are starting events")
-    hi = [c.name for c in character_pool]
-    print(f"Current character Pool: {hi}")
-
-    while character_pool:
-        # define and remove from pool char_a
-        char_a = character_pool.pop(0)
-        char_b = None # default value for char_b unless overridden
-        hi =  [c.name for c in character_pool ]
-
-        # 50% chance another character is involved
-        # define and remove from pool char_b
-        if random.choice([True, False]) and len(character_pool) > 0:
-            char_b = random.choice(character_pool)
-            character_pool.remove(char_b)  # Remove char_b from the pool
-
-        # create input message
-        input_message = create_input_message(char_a, char_b)
-
-        # get output message and convert to json, then append to list
-        output = send_message(input_message)
-        print(output)
-        event = output["event"]
-        events_to_display.append(event)
-
-        # update the character attributes
-        update_characters(char_a, char_b, output)
-        print(f"Current character Pool: {[c.name for c in character_pool]}")
-    return events_to_display
 
 @app.route('/game', methods=['GET', 'POST'])
 def play():
-    """On get displays a list of remaining characters, on post displays a list of events"""
     form = NextEvent()
     if request.method == 'POST':
-        # check if winner, if so render winner
+        # //TODO: replace the check for winner with a function in game logic
         if len(characters) == 1:
             return render_template("winner.html", form=form, winner=characters[0].name)
-        print ("helloooo")
-        displayed_events = generate_event()
+        displayed_events = generate_event()  # Pass characters here
         return render_template("event.html", form=form, events=displayed_events)
     return render_template("game.html", characters=characters, form=form)
 
@@ -71,6 +32,7 @@ def home():
     return render_template("index.html")
 
 # //TODO: Allow user to select number of characters, make everything dynamic
+# //TODO: replace the check for winner with a function in game logic
 @app.route('/create', methods=['GET', 'POST'])
 def choose_characters():
     # creates four forms
@@ -87,18 +49,6 @@ def choose_characters():
     return render_template("choose_characters.html", forms=forms, characters=characters)
 
 
-def create_edit_character(form):
-    """Creates a new character object or changes the name of an existing character object"""
-    index = int(form.slot.data)
-    name = form.name.data
-
-    # if nobody in slot, create a new character object
-    if characters[index] is None:
-        characters[index] = Character(name)
-
-    # if it already exists, just change the attribute
-    else:
-        characters[index].name = name
 
 if __name__ == '__main__':
     app.run(debug=True)
