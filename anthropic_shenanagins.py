@@ -17,7 +17,7 @@ client = anthropic.Anthropic(api_key= api_key)
 
 #// TODO: 50/50 shot it's a double, if it is a double then char_b no longer gets an event
 system_prompt = ('generate a 1-2 sentence unique and creative Battle Royale event for the focus character, consider their status, last event, and items.'
-                 'Include the scene character if provided. Provide only the output.'
+                 'Include the scene character if provided. Provide only the output, in json format'
                  'Input: Focus: [Name, Health, LastEvent, Items] Scene: [Name, Health, LastEvent, Items]'
                  'Output:{ "event": "Event description", "updates":{ '
                  '"CharacterName": {"Health": int, "LastEvent": "string",'
@@ -28,6 +28,7 @@ system_prompt = ('generate a 1-2 sentence unique and creative Battle Royale even
 #          'Scene: [Mable, 90, "got hit", ["slingshot"]]')
 
 def create_input_message(char_a, char_b):
+    """Takes character objects, formats and returns their attributes as a string"""
     # make initial message
     # if char B not None, add that too and append
     # return it
@@ -45,6 +46,7 @@ def create_input_message(char_a, char_b):
 
 # creating message to send
 def send_message(input_message):
+        """Sends input to language model and returns the output object"""
         return client.messages.create(
                     model="claude-3-haiku-20240307",
                     max_tokens=1000,
@@ -63,9 +65,13 @@ def send_message(input_message):
                     ]
                 )
 
+def process_output(output):
+    """Returns event message and updates attributes of character objects"""
+    # extract text from output response
+    print(output)
+    output_data = json.loads(output)
+    return output_data["event"]
 # extract the text from the response
-char_a = "Luffy"
-char_b = "Mable"
 # claude_output = send_message().content[0].text
 # event_data = json.loads(claude_output)
 # print(event_data)

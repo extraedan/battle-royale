@@ -3,7 +3,7 @@ from forms import InputCharacter, NextEvent
 from flask_bootstrap import Bootstrap
 from characters import Character
 from events import events
-from anthropic_shenanagins import create_input_message
+from anthropic_shenanagins import create_input_message, send_message, process_output
 import random
 
 # Create Flask Server
@@ -42,6 +42,9 @@ def generate_event():
         # create input message
         input_message = create_input_message(char_a, char_b)
         print(input_message)
+        output = send_message(input_message).content[0].text
+        event = process_output(output)
+        print(event)
 
 
     return events_to_display
