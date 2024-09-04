@@ -4,11 +4,25 @@ import random
 
 characters = [None, None, None, None]
 ai_client = AnthropicClient()
+global current_round
+
+def get_round_number():
+    global current_round
+    return current_round
+
+def increase_round_number(num=1):
+    global current_round
+    current_round += 1
+    return current_round
+
+def reset_round_number():
+    global current_round
+    current_round = 0
+    return current_round
 
 def generate_event():
     """Generate and return a list of events to display for the round"""
     events_to_display = []
-
     # create a list of living characters to choose from
     character_pool = [character for character in characters if character.death == False]
 

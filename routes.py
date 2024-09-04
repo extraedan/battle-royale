@@ -7,6 +7,7 @@ def init_routes(app):
 
     @app.route('/game', methods=['GET', 'POST'])
     def play():
+        round_number = increase_round_number()
         form = NextEvent() # Create next event form
         characters = get_characters() # Fetch the character list
 
@@ -17,10 +18,10 @@ def init_routes(app):
                 return render_template("winner.html", form=form, winner=winner)
 
             displayed_events = generate_event()
-            return render_template("event.html", form=form, events=displayed_events)
+            return render_template("event.html", form=form, events=displayed_events, round_number=round_number)
 
         # Render the form page for a GET request
-        return render_template("game.html", characters=characters, form=form)
+        return render_template("game.html", characters=characters, form=form, round_number=round_number)
 
     @app.route('/')
     def home():
