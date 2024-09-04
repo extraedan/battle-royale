@@ -1,5 +1,5 @@
 class Character:
-    def __init__(self, name):
+    def __init__(self, name, id):
         self.name = name
 
         # default values
@@ -7,3 +7,4 @@ class Character:
         self.last_event = "started battle royale"
         self.items = []
         self.death = False
+        self.id = id
