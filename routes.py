@@ -4,16 +4,19 @@ from logic import *
 
 def init_routes(app):
 
+
     @app.route('/game', methods=['GET', 'POST'])
     def play():
-        form = NextEvent()
-        characters = get_characters()
+        form = NextEvent() # Create next event form
+        characters = get_characters() # Fetch the character list
+
         if request.method == 'POST':
             # TODO: replace the check for winner with a function in game logic
-            if len(characters) == 1:
-                return render_template("winner.html", form=form, winner=characters[0].name)
+
             displayed_events = generate_event()
             return render_template("event.html", form=form, events=displayed_events)
+
+        # Render the form page for a GET request
         return render_template("game.html", characters=characters, form=form)
 
     @app.route('/')
