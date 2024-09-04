@@ -12,6 +12,9 @@ def init_routes(app):
 
         if request.method == 'POST':
             # TODO: replace the check for winner with a function in game logic
+            if check_for_winner():
+                winner = get_living_characters()[0]
+                return render_template("winner.html", form=form, winner=winner)
 
             displayed_events = generate_event()
             return render_template("event.html", form=form, events=displayed_events)
