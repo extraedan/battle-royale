@@ -7,6 +7,7 @@ class GameState:
         self.characters = []
         self.round_number = 0
         self.character_amount = 0
+        self.context = "The battle royale has started"
         # Add other game state variables as needed
 
 game = GameState()
@@ -39,7 +40,7 @@ def generate_event():
         char_a, char_b = select_event_characters(character_pool) # select one or two characters to be in an event
 
         # Making API request
-        input_text = ai_client.format_input_text(char_a, char_b) # format input message
+        input_text = ai_client.format_input_text(char_a, char_b, game.context) # format input message
         print(input_text)
         response = ai_client.send_message(input_text) # send message and receive output
         response_json = ai_client.response_to_json(response) # convert to json
@@ -47,6 +48,7 @@ def generate_event():
 
         # Processing data
         update_character_attributes(char_a, char_b, response_json) # update attributes of characters
+        update_context(response_json) # updates overall context
         events_to_display.append(response_json["event"]) # add event texts to list of events
 
     # return list of events to display strings to route
@@ -65,16 +67,27 @@ def select_event_characters(character_pool):
 
 def update_character_attributes(char_a, char_b, output):
     """Updates character attributes with new values"""
+    print(f"{char_a.name}: {char_a.death}")
+
     char_a.status = output["updates"][char_a.name]["Status"]
     char_a.last_event = output["updates"][char_a.name]["LastEvent"]
     char_a.items = output["updates"][char_a.name]["Items"]
     char_a.death = output["updates"][char_a.name]["Death"]
+    print(f'From output: {output["updates"][char_a.name]["Death"]}')
+    print(f"{char_a.name}: {char_a.death}")
+
 
     if char_b is not None:
+        print(f"{char_b.name}: {char_b.death}")
         char_b.status = output["updates"][char_b.name]["Status"]
         char_b.last_event = output["updates"][char_b.name]["LastEvent"]
         char_b.items = output["updates"][char_b.name]["Items"]
         char_b.death = output["updates"][char_b.name]["Death"]
+        print(f'From output: {output["updates"][char_b.name]["Death"]}')
+        print(f"{char_b.name}: {char_b.death}")
+
+def update_context(output):
+    game.context = output["context"]
 
 def create_edit_character(form):
     """Processes form input to create a new character or edit an existing one based on the slot number."""

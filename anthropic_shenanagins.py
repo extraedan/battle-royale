@@ -27,7 +27,7 @@ class AnthropicClient:
             self.system_prompt = file.read()
 
     @staticmethod
-    def format_input_text(char_a, char_b):
+    def format_input_text(char_a, char_b, context):
         """Takes character objects, formats and returns their attributes as a string"""
         # Formats char_a's information
         formatted_input = (f"'Input:'"
@@ -36,6 +36,8 @@ class AnthropicClient:
         # Format char_b's information, if it has any
         if char_b is not None:
             formatted_input += f"\n'Scene: [{char_b.name}, {char_b.status}, {char_b.last_event}, {char_b.items}]'"
+
+        formatted_input += f'Overall_Context: "{context}"'
 
         return formatted_input
 
