@@ -1,0 +1,18 @@
+{% include "header.html" %}
+{% from "bootstrap5/form.html" import render_form %}
+
+        <div class="row mt-4">
+            <div class="col">
+                <div class="card bg-secondary text-light">
+                    <div class="card-body">
+                        <div class="col text-center">
+                        {{ render_form(form, novalidate=True, button_map={"submit": "tertiary mt-2"}) }}
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

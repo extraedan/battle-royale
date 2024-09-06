@@ -4,12 +4,10 @@ import random
 
 class GameState:
     def __init__(self):
-        self.characters = [None, None, None, None]
+        self.characters = []
         self.round_number = 0
+        self.character_amount = 0
         # Add other game state variables as needed
-
-    def increase_round_number(self):
-        self.round_number += 1
 
 game = GameState()
 ai_client = AnthropicClient()
@@ -24,6 +22,9 @@ def increase_round_number(num=1):
 def reset_round_number():
     game.round_number = 0
     return game.round_number
+
+def create_characters():
+    pass
 
 def generate_event():
     """Generate and return a list of events to display for the round"""

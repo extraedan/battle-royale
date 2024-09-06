@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, url_for
-from forms import InputCharacter, NextEvent
+from forms import InputCharacter, NextEvent, CharacterAmount
 from logic import *
 
 def init_routes(app):
@@ -32,10 +32,20 @@ def init_routes(app):
         reset_game()
         return redirect(url_for('choose_characters'))
 
+    @app.route('/count', methods=['GET', 'POST'])
+    def character_amount():
+        form = CharacterAmount()
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                game.character_amount = form.amount.data
+                return redirect(url_for('choose_characters'))  # Redirect to choose_characters
+
+        return render_template("character_amount.html", form=form)
+
     @app.route('/create', methods=['GET', 'POST'])
     def choose_characters():
         """Handle character creation and editing."""
-        forms = [InputCharacter() for _ in range(4)]  # Create the forms
+        forms = [InputCharacter() for _ in range(game.character_amount)]  # Create the forms
         character_to_render = get_characters()  # Fetch the character list
 
         # Handle form submission

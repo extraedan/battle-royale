@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, FileField
+from wtforms import StringField, SubmitField, PasswordField, FileField, IntegerField
 from wtforms.fields.simple import HiddenField
 from wtforms.validators import DataRequired, URL
 
@@ -10,3 +10,7 @@ class InputCharacter(FlaskForm):
 
 class NextEvent(FlaskForm):
     submit = SubmitField("Next event")
+
+class CharacterAmount(FlaskForm):
+    amount = IntegerField("Amount", validators=[DataRequired()])
+    submit = SubmitField("Add amount")
