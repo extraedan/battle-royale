@@ -2,6 +2,11 @@ import os
 from dotenv import load_dotenv
 import anthropic
 import json
+import logging
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 class AnthropicClient:
     # Constants
@@ -35,7 +40,8 @@ class AnthropicClient:
 
     def send_message(self, input_message):
         """Sends input to language model and returns the output as a json"""
-        return self.client.messages.create(
+        logger.info(f"Sending message to AI: {input_message}")
+        response =  self.client.messages.create(
             model="claude-3-haiku-20240307",
             max_tokens=self.MAX_TOKENS,
             temperature=self.TEMPERATURE,
@@ -52,6 +58,9 @@ class AnthropicClient:
                 }
             ]
         )
+
+        logger.info(f"Received response from AI: {response.content[0].text}")
+        return response
 
     @staticmethod
     def response_to_json(response):
