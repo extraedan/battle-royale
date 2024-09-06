@@ -27,6 +27,11 @@ def init_routes(app):
     def home():
         return render_template("index.html")
 
+    @app.route('/reset')
+    def reset():
+        reset_game()
+        return redirect(url_for('choose_characters'))
+
     @app.route('/create', methods=['GET', 'POST'])
     def choose_characters():
         """Handle character creation and editing."""

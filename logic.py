@@ -98,3 +98,7 @@ def check_for_winner():
 def get_living_characters():
     return [character for character in game.characters if character.death == False]
 
+def reset_game():
+    game.characters = [None, None, None, None]
+    game.round_number = 0
+
