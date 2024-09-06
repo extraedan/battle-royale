@@ -18,7 +18,7 @@ def init_routes(app):
                 return render_template("winner.html", form=form, winner=winner)
 
             displayed_events = generate_event()
-            return render_template("event.html", form=form, events=displayed_events)
+            return render_template("event.html", form=form, events=displayed_events, game=game)
 
         # Render the form page for a GET request
         return render_template("game.html", game=game, form=form)
