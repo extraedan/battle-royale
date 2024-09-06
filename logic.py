@@ -23,8 +23,10 @@ def reset_round_number():
     game.round_number = 0
     return game.round_number
 
-def create_characters():
-    pass
+def create_character_slots(num):
+    """Fills the characters list with Nones, based on character amount requested"""
+    for i in range(num):
+        game.characters.append(None)
 
 def generate_event():
     """Generate and return a list of events to display for the round"""
