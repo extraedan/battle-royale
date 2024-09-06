@@ -2,29 +2,34 @@ from anthropic_shenanagins import *
 from characters import Character
 import random
 
-characters = [None, None, None, None]
+class GameState:
+    def __init__(self):
+        self.characters = [None, None, None, None]
+        self.round_number = 0
+        # Add other game state variables as needed
+
+    def increase_round_number(self):
+        self.round_number += 1
+
+game = GameState()
 ai_client = AnthropicClient()
-global current_round
 
 def get_round_number():
-    global current_round
-    return current_round
+    return game.round_number
 
 def increase_round_number(num=1):
-    global current_round
-    current_round += 1
-    return current_round
+    game.round_number += 1
+    return game.round_number
 
 def reset_round_number():
-    global current_round
-    current_round = 0
-    return current_round
+    game.round_number = 0
+    return game.round_number
 
 def generate_event():
     """Generate and return a list of events to display for the round"""
     events_to_display = []
     # create a list of living characters to choose from
-    character_pool = [character for character in characters if character.death == False]
+    character_pool = [character for character in game.characters if character.death == False]
 
     # going through each character in the pool
     while character_pool:
@@ -75,15 +80,15 @@ def create_edit_character(form):
     name = form.name.data # get the character name from the form
 
     # Creating new characters
-    if characters[index] is None: # if no character is in that slot
-        characters[index] = Character(name, index) # make a new character, passing in name and slot ID
+    if game.characters[index] is None: # if no character is in that slot
+        game.characters[index] = Character(name, index) # make a new character, passing in name and slot ID
 
     # Edit character name if it already exists
     else:
-        characters[index].name = name
+        game.characters[index].name = name
 
 def get_characters():
-    return characters
+    return game.characters
 
 def check_for_winner():
     living_characters = get_living_characters()
@@ -91,5 +96,5 @@ def check_for_winner():
         return True
 
 def get_living_characters():
-    return [character for character in characters if character.death == False]
+    return [character for character in game.characters if character.death == False]
 
