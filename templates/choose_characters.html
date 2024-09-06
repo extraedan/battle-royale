@@ -29,9 +29,9 @@
                         {% set _ = form.slot.process_data(c_num) %}
 
                         <!-- If there is a character -->
-                        {% if characters[c_num] %}
+                        {% if game.characters[c_num] %}
                         <!-- set the name label form to the character's name -->
-                        <h2> {{ form.name.label(text=characters[c_num].name) }} </h2>
+                        <h2> {{ form.name.label(text=game.characters[c_num].name) }} </h2>
 
                         <!-- Otherwise make it character's index + 1 for character number-->
                         {% else %}

@@ -18,10 +18,10 @@ def init_routes(app):
                 return render_template("winner.html", form=form, winner=winner)
 
             displayed_events = generate_event()
-            return render_template("event.html", form=form, events=displayed_events, round_number=round_number)
+            return render_template("event.html", form=form, events=displayed_events)
 
         # Render the form page for a GET request
-        return render_template("game.html", characters=characters, form=form, round_number=round_number)
+        return render_template("game.html", game=game, form=form)
 
     @app.route('/')
     def home():
@@ -41,7 +41,7 @@ def init_routes(app):
             return redirect(url_for('choose_characters'))  # Redirect after processing all forms
 
         # Render the form page for a GET request
-        return render_template("choose_characters.html", forms=forms, characters=characters)
+        return render_template("choose_characters.html", forms=forms, game=game)
 
 
     return app
