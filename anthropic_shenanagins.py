@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 import anthropic
 import json
 import logging
+import time
+
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO,
@@ -60,6 +62,7 @@ class AnthropicClient:
         )
 
         logger.info(f"Received response from AI: {response.content[0].text}")
+        time.sleep(5)
         return response
 
     @staticmethod
