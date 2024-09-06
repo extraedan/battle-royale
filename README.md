@@ -31,3 +31,12 @@
   - Implement a three strike system that checks for valid outputs from LLM
   - Adjust system prompt for higher quality responses OR upgrade to higher quality model (current model Haiku, upgraded is Sonnet 3.5)
   - Making sure events are definitive and not open ended so that the game flows as intended
+
+### 2024-09-05 - Refactoring
+- **Implemented**: Completely seperated concerns, moving logic and routes into seperate files, made efforts to make the code as modular as possible
+- **Learned**: 
+  - Gamestate class is useful, instead of passing in characters, round numbers and more, I can pass in the 'game' object of GameState class where I can track all values and render them in my template as needed
+- **Next Steps**:
+  - System prompt still needs to be adjusted
+  - Need to start adjusting quality of life, making the game replayable, adding images of characters
+  - Use BrantSteele's Hunger Games as reference for what quality of life features to add
