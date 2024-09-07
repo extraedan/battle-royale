@@ -67,24 +67,28 @@ def select_event_characters(character_pool):
 
 def update_character_attributes(char_a, char_b, output):
     """Updates character attributes with new values"""
-    print(f"{char_a.name}: {char_a.death}")
+    try:
+        print(f"{char_a.name}: {char_a.death}")
 
-    char_a.status = output["updates"][char_a.name]["Status"]
-    char_a.last_event = output["updates"][char_a.name]["LastEvent"]
-    char_a.items = output["updates"][char_a.name]["Items"]
-    char_a.death = output["updates"][char_a.name]["Death"]
-    print(f'From output: {output["updates"][char_a.name]["Death"]}')
-    print(f"{char_a.name}: {char_a.death}")
+        char_a.status = output["updates"][char_a.name]["Status"]
+        char_a.last_event = output["updates"][char_a.name]["LastEvent"]
+        char_a.items = output["updates"][char_a.name]["Items"]
+        char_a.death = output["updates"][char_a.name]["Death"]
+        print(f'From output: {output["updates"][char_a.name]["Death"]}')
+        print(f"{char_a.name}: {char_a.death}")
 
-
-    if char_b is not None:
-        print(f"{char_b.name}: {char_b.death}")
-        char_b.status = output["updates"][char_b.name]["Status"]
-        char_b.last_event = output["updates"][char_b.name]["LastEvent"]
-        char_b.items = output["updates"][char_b.name]["Items"]
-        char_b.death = output["updates"][char_b.name]["Death"]
-        print(f'From output: {output["updates"][char_b.name]["Death"]}')
-        print(f"{char_b.name}: {char_b.death}")
+        if char_b is not None:
+            print(f"{char_b.name}: {char_b.death}")
+            char_b.status = output["updates"][char_b.name]["Status"]
+            char_b.last_event = output["updates"][char_b.name]["LastEvent"]
+            char_b.items = output["updates"][char_b.name]["Items"]
+            char_b.death = output["updates"][char_b.name]["Death"]
+            print(f'From output: {output["updates"][char_b.name]["Death"]}')
+            print(f"{char_b.name}: {char_b.death}")
+    except KeyError as e:
+        print(f"Key error in update_character_attributes: {e}")
+    except Exception as e:
+        print(f"Unexpected error in update_character_attributes: {e}")
 
 def update_context(output):
     game.context = output["context"]
