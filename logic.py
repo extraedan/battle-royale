@@ -93,11 +93,8 @@ def update_character_attributes(char_a, char_b, output):
 def update_context(output):
     game.context = output["context"]
 
-def create_edit_character(form):
+def create_edit_character(name,index):
     """Processes form input to create a new character or edit an existing one based on the slot number."""
-
-    index = int(form.slot.data) # get the character slot from the form
-    name = form.name.data # get the character name from the form
 
     # Creating new characters
     if game.characters[index] is None: # if no character is in that slot
@@ -106,6 +103,13 @@ def create_edit_character(form):
     # Edit character name if it already exists
     else:
         game.characters[index].name = name
+
+def check_if_duplicate(name, index):
+    # Check if the name is already taken by another character
+    existing_names = [c.name for c in game.characters if c is not None and c.id != index]
+    if name in existing_names:
+        return True
+
 
 def get_characters():
     return game.characters

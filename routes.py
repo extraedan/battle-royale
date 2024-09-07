@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from forms import InputCharacter, NextEvent, CharacterAmount
 from logic import *
 
@@ -47,13 +47,23 @@ def init_routes(app):
     def choose_characters():
         """Handle character creation and editing."""
         forms = [InputCharacter() for _ in range(game.character_amount)]  # Create the forms
-        character_to_render = get_characters()  # Fetch the character list
+        messages = []
 
         # Handle form submission
         if request.method == 'POST':
             for form in forms:
                 if form.validate_on_submit():
-                    create_edit_character(form)  # Create or edit character that was submitted
+                    name = form.name.data  # get the character name from the form
+                    index = int(form.slot.data)  # get the character slot from the form
+                    if check_if_duplicate(name,index):
+                        messages.append(('error', f'Error: Character name "{name}" already exists.'))
+                    else:
+                        create_edit_character(name,index)  # Create or edit character that was submitted
+                        messages.append(('success', f'Character "{name}" successfully created/edited.'))
+
+            for category, message in set(messages):
+                flash(message, category)
+
             return redirect(url_for('choose_characters'))  # Redirect after processing all forms
 
         # Render the form page for a GET request
