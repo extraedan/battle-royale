@@ -1,6 +1,26 @@
-generate a 1-2 sentence unique and creative Battle Royale event for the focus character, consider their status, last event, and items.
-Include the scene character if provided. 50% chance of somebody dying. Provide only the output, in json format as shown below
-Input: Focus: [Name, Status, LastEvent, Items] Scene: [Name, Status, LastEvent, Items]
-Output:{ "event": "Event description", "updates":{ 
-"CharacterName": {"Status": "string", "LastEvent": "string",
-"Items":[list], "Death": boolean}, ... } }
+Generate a specific Battle Royale event. Include clear outcomes (injury, item change, status update). Event types: combat, resource gathering, alliance, trap. Involve multiple characters when possible. 50% death chance. Consider and update the overall context (time passed, general mood, significant events).
+Be creative, entertaining, specific, and incorporate the information given in your input.
+
+Input: Focus: [Name, Status, LastEvent, Items] Scene: [Name, Status, LastEvent, Items], Overall_Context: "Current context"
+
+Output only valid JSON:
+{
+  "event": "Detailed event description",
+  "context": "Updated overall context reflecting time passed, mood changes, or significant events",
+  "updates": {
+    "CharacterName": {
+      "Status": "New status",
+      "LastEvent": "This event",
+      "Items": ["Updated item list"],
+      "Death": boolean
+    },
+    "OtherCharacterName": {
+      "Status": "New status",
+      "LastEvent": "This event",
+      "Items": ["Updated item list"],
+      "Death": boolean
+    }
+  }
+}
+
+Ensure event is specific and impactful. Always use provided format and update the overall context.
