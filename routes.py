@@ -12,9 +12,13 @@ def init_routes(app):
         characters = get_characters() # Fetch the character list
 
         if request.method == 'POST':
-            # TODO: replace the check for winner with a function in game logic
             if check_for_winner():
-                winner = get_living_characters()[0]
+                # if everybody is dead, pass in a message saying everybody died
+                try:
+                    winner = get_living_characters()[0]
+                except IndexError:
+                    winner = None
+
                 return render_template("winner.html", form=form, winner=winner)
 
             displayed_events = generate_event()

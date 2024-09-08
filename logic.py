@@ -116,7 +116,7 @@ def get_characters():
 
 def check_for_winner():
     living_characters = get_living_characters()
-    if len(living_characters) == 1:
+    if len(living_characters) <= 1:
         return True
 
 def get_living_characters():
