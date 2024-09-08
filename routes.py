@@ -25,6 +25,7 @@ def init_routes(app):
 
     @app.route('/')
     def home():
+        reset_game()
         return render_template("index.html")
 
     @app.route('/reset')
@@ -68,6 +69,10 @@ def init_routes(app):
 
         # Render the form page for a GET request
         return render_template("choose_characters.html", forms=forms, game=game)
+
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('404.html'), 404
 
 
     return app
