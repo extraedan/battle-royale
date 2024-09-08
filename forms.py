@@ -1,11 +1,15 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, FileField, IntegerField
 from wtforms.fields.simple import HiddenField
-from wtforms.validators import DataRequired, URL, NumberRange
+from wtforms.validators import DataRequired, URL, NumberRange, Length, Regexp
 
 
 class InputCharacter(FlaskForm):
-    name = StringField("", validators=[DataRequired()])
+    name = StringField("", validators=[
+        DataRequired(),
+        Length(min=2, max=30, message="Name must be between 2 and 30 characters."),
+        Regexp('^[A-Za-z0-9 ]*$', message="Name can only contain letters, numbers, and spaces.")
+    ])
     slot = HiddenField('Slot')
     submit = SubmitField("Add character")
 
