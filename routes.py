@@ -1,4 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash
+from werkzeug.utils import secure_filename
+
 from forms import InputCharacter, NextEvent, CharacterAmount
 from logic import *
 
@@ -60,19 +62,33 @@ def init_routes(app):
                 if form.validate_on_submit():
                     name = form.name.data  # get the character name from the form
                     index = int(form.slot.data)  # get the character slot from the form
-                    if check_if_duplicate(name,index):
+                    image = form.image.data # add image
+
+                    # if it's an image, save it and add the attribute
+                    if image:
+                        filename = secure_filename(image.filename) # sanitizes filename
+                        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                        create_edit_character(name=name,index=index,image=filename)
+
+                    # if it's a duplicate name, return error
+                    elif check_if_duplicate(name,index):
                         messages.append(('error', f'Error: Character name "{name}" already exists.'))
+
+                    # if it's otherwise a valid name, create/edit character
                     else:
                         create_edit_character(name,index)  # Create or edit character that was submitted
                         messages.append(('success', f'Character "{name}" successfully created/edited.'))
 
+            # flashes success or error message
             for category, message in set(messages):
                 flash(message, category)
 
-            return redirect(url_for('choose_characters'))  # Redirect after processing all forms
+            # Redirect after processing all forms
+            return redirect(url_for('choose_characters'))
 
         # Render the form page for a GET request
         return render_template("choose_characters.html", forms=forms, game=game)
+
 
     @app.errorhandler(404)
     def page_not_found(e):

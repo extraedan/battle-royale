@@ -55,6 +55,7 @@
                         <h2> {{ form.name.label(text='Character ' ~ (c_num + 1)) }} </h2>
                         {% endif %}
 
+
                         {{ render_form(form, novalidate=True, button_map={"submit": "tertiary mt-2"}) }}  <!-- Adjusted button class to use tertiary style -->
                     </div>
             </div>

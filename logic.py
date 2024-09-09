@@ -93,7 +93,7 @@ def update_character_attributes(char_a, char_b, output):
 def update_context(output):
     game.context = output["context"]
 
-def create_edit_character(name,index):
+def create_edit_character(name,index,image=None):
     """Processes form input to create a new character or edit an existing one based on the slot number."""
 
     # Creating new characters
@@ -103,6 +103,10 @@ def create_edit_character(name,index):
     # Edit character name if it already exists
     else:
         game.characters[index].name = name
+
+    # Update image if there is one
+    if image is not None:
+        game.characters[index].image = image
 
 def check_if_duplicate(name, index):
     # Check if the name is already taken by another character

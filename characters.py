@@ -7,4 +7,5 @@ class Character:
         self.last_event = "started battle royale"
         self.items = []
         self.death = False
+        self.images = None
         self.id = id
