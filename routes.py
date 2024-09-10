@@ -32,6 +32,7 @@ def init_routes(app):
     @app.route('/')
     def home():
         reset_game()
+        print("Welcome")
         return render_template("index.html")
 
     @app.route('/reset')
@@ -62,13 +63,15 @@ def init_routes(app):
                 if form.validate_on_submit():
                     name = form.name.data  # get the character name from the form
                     index = int(form.slot.data)  # get the character slot from the form
-                    image = form.image.data # add image
+                    image = form.image.data
+                    image_name = form.image.name
 
-                    # if it's an image, save it and add the attribute
                     if image:
-                        filename = secure_filename(image.filename) # sanitizes filename
-                        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                        create_edit_character(name=name,index=index,image=filename)
+                        filename = secure_filename(form.image.data.filename)
+                        filepath = os.path.join('static', 'character_uploads', filename)
+                        form.image.data.save(filepath)
+                        create_edit_character(name=name,index=index,image=filepath)
+
 
                     # if it's a duplicate name, return error
                     elif check_if_duplicate(name,index):

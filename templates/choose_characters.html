@@ -50,6 +50,14 @@
                         <!-- set the name label form to the character's name -->
                         <h2> {{ form.name.label(text=game.characters[c_num].name) }} </h2>
 
+                        <!-- Display the image if it exists -->
+                    {% if game.characters[c_num].image %}
+                        <img src="{{ url_for('static', filename= game.characters[c_num].image) }}"
+                             alt="{{ game.characters[c_num].name }}"
+                             class="img-fluid mb-3"
+                             style="max-height: 150px;">
+                    {% endif %}
+
                         <!-- Otherwise make it character's index + 1 for character number-->
                         {% else %}
                         <h2> {{ form.name.label(text='Character ' ~ (c_num + 1)) }} </h2>
