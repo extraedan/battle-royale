@@ -106,7 +106,9 @@ def create_edit_character(name,index,image=None):
 
     # Update image if there is one
     if image is not None:
+        print(image)
         game.characters[index].image = image
+        print(game.characters[index].image)
 
 def check_if_duplicate(name, index):
     # Check if the name is already taken by another character

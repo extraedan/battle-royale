@@ -52,11 +52,11 @@
 
                         <!-- Display the image if it exists -->
                     {% if game.characters[c_num].image %}
-                        <img src="{{ url_for('static', filename= game.characters[c_num].image) }}"
-                             alt="{{ game.characters[c_num].name }}"
-                             class="img-fluid mb-3"
-                             style="max-height: 150px;">
-                    {% endif %}
+    <img src="{{ url_for('static', filename=game.characters[c_num].image.replace('\\', '/')) }}"
+         alt="{{ game.characters[c_num].name }}"
+         class="img-fluid mb-3"
+         style="max-height: 150px;">
+{% endif %}
 
                         <!-- Otherwise make it character's index + 1 for character number-->
                         {% else %}

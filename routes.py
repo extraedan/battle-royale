@@ -64,13 +64,22 @@ def init_routes(app):
                     name = form.name.data  # get the character name from the form
                     index = int(form.slot.data)  # get the character slot from the form
                     image = form.image.data
-                    image_name = form.image.name
+                    print(image)
 
+                    # if there is an image to save
                     if image:
-                        filename = secure_filename(form.image.data.filename)
-                        filepath = os.path.join('static', 'character_uploads', filename)
-                        form.image.data.save(filepath)
-                        create_edit_character(name=name,index=index,image=filepath)
+                        filename = secure_filename(form.image.data.filename) # gets filename
+
+                        # creates filepaths
+                        filepath_save = os.path.join('static', 'character_uploads', filename)
+                        filepath_pass = os.path.join('character_uploads', filename)
+
+                        # should save image in a non-corrupted way
+                        image.seek(0)
+                        image.save(filepath_save)
+                        print(filepath_save)
+                        print(f"Filepath Pass {filepath_pass}")
+                        create_edit_character(name=name,index=index,image=filepath_pass)
 
 
                     # if it's a duplicate name, return error
