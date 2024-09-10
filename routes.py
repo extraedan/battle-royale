@@ -46,6 +46,7 @@ def init_routes(app):
         if request.method == 'POST':
             if form.validate_on_submit():
                 game.character_amount = form.amount.data
+                print(game.character_amount)
                 create_character_slots(game.character_amount)
                 return redirect(url_for('choose_characters'))  # Redirect to choose_characters
 

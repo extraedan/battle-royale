@@ -26,7 +26,9 @@ def reset_round_number():
 
 def create_character_slots(num):
     """Fills the characters list with Nones, based on character amount requested"""
+    game.characters = []
     for i in range(num):
+        print(game.characters)
         game.characters.append(None)
 
 def generate_event():
@@ -129,6 +131,5 @@ def get_living_characters():
     return [character for character in game.characters if character.death == False]
 
 def reset_game():
-    game.characters = [None, None, None, None]
     game.round_number = 0
 
