@@ -22,6 +22,12 @@
                     <div class="card-body p-4 text-center">
                         {% if winner %}
                         <h2 class="card-title">{{ winner.name }}</h2>
+                        {% if c.image %}
+            <img src="{{ url_for('static', filename=winner.image.replace('\\', '/')) }}"
+                 alt="{{ winner..name }}"
+                 class="img-fluid mb-3"
+                 style="max-height: 150px;">
+            {% endif %}
                         {% else %}
                         <h2 class="card-title">No Winner</h2>
                         <p>Everybody died, nobody won!</p>
