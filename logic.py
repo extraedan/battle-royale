@@ -26,7 +26,9 @@ def reset_round_number():
 
 def create_character_slots(num):
     """Fills the characters list with Nones, based on character amount requested"""
+    game.characters = []
     for i in range(num):
+        print(game.characters)
         game.characters.append(None)
 
 def generate_event():
@@ -67,33 +69,34 @@ def select_event_characters(character_pool):
 
 def update_character_attributes(char_a, char_b, output):
     """Updates character attributes with new values"""
-    print(f"{char_a.name}: {char_a.death}")
+    try:
+        print(f"{char_a.name}: {char_a.death}")
 
-    char_a.status = output["updates"][char_a.name]["Status"]
-    char_a.last_event = output["updates"][char_a.name]["LastEvent"]
-    char_a.items = output["updates"][char_a.name]["Items"]
-    char_a.death = output["updates"][char_a.name]["Death"]
-    print(f'From output: {output["updates"][char_a.name]["Death"]}')
-    print(f"{char_a.name}: {char_a.death}")
+        char_a.status = output["updates"][char_a.name]["Status"]
+        char_a.last_event = output["updates"][char_a.name]["LastEvent"]
+        char_a.items = output["updates"][char_a.name]["Items"]
+        char_a.death = output["updates"][char_a.name]["Death"]
+        print(f'From output: {output["updates"][char_a.name]["Death"]}')
+        print(f"{char_a.name}: {char_a.death}")
 
-
-    if char_b is not None:
-        print(f"{char_b.name}: {char_b.death}")
-        char_b.status = output["updates"][char_b.name]["Status"]
-        char_b.last_event = output["updates"][char_b.name]["LastEvent"]
-        char_b.items = output["updates"][char_b.name]["Items"]
-        char_b.death = output["updates"][char_b.name]["Death"]
-        print(f'From output: {output["updates"][char_b.name]["Death"]}')
-        print(f"{char_b.name}: {char_b.death}")
+        if char_b is not None:
+            print(f"{char_b.name}: {char_b.death}")
+            char_b.status = output["updates"][char_b.name]["Status"]
+            char_b.last_event = output["updates"][char_b.name]["LastEvent"]
+            char_b.items = output["updates"][char_b.name]["Items"]
+            char_b.death = output["updates"][char_b.name]["Death"]
+            print(f'From output: {output["updates"][char_b.name]["Death"]}')
+            print(f"{char_b.name}: {char_b.death}")
+    except KeyError as e:
+        print(f"Key error in update_character_attributes: {e}")
+    except Exception as e:
+        print(f"Unexpected error in update_character_attributes: {e}")
 
 def update_context(output):
     game.context = output["context"]
 
-def create_edit_character(form):
+def create_edit_character(name,index,image=None):
     """Processes form input to create a new character or edit an existing one based on the slot number."""
-
-    index = int(form.slot.data) # get the character slot from the form
-    name = form.name.data # get the character name from the form
 
     # Creating new characters
     if game.characters[index] is None: # if no character is in that slot
@@ -103,18 +106,30 @@ def create_edit_character(form):
     else:
         game.characters[index].name = name
 
+    # Update image if there is one
+    if image is not None:
+        print(image)
+        game.characters[index].image = image
+        print(game.characters[index].image)
+
+def check_if_duplicate(name, index):
+    # Check if the name is already taken by another character
+    existing_names = [c.name for c in game.characters if c is not None and c.id != index]
+    if name in existing_names:
+        return True
+
+
 def get_characters():
     return game.characters
 
 def check_for_winner():
     living_characters = get_living_characters()
-    if len(living_characters) == 1:
+    if len(living_characters) <= 1:
         return True
 
 def get_living_characters():
     return [character for character in game.characters if character.death == False]
 
 def reset_game():
-    game.characters = [None, None, None, None]
     game.round_number = 0
 

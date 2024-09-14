@@ -1,8 +1,9 @@
+import os
 from flask import Flask
 from flask_bootstrap import Bootstrap
 from routes import init_routes
 
-
+print("test")
 # Create Flask Server
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'dev'

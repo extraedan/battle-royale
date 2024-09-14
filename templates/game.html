@@ -24,6 +24,16 @@
                 <h2>{{ c.name }}</h2>
                 <!-- Add more character details here if needed -->
             </div>
+
+            {% if c.image %}
+            <img src="{{ url_for('static', filename=c.image.replace('\\', '/')) }}"
+                 alt="{{ c.name }}"
+                 class="img-fluid mb-3"
+                 style="max-height: 150px;">
+            {% endif %}
+
+
+
         </div>
     </div>
     {% endfor %}

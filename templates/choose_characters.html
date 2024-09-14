@@ -1,6 +1,23 @@
 {% include "header.html" %}
 {% from "bootstrap5/form.html" import render_form %}
 
+
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+
+
+
 <body class="bg-primary text-primary"> <!-- Use primary background and text color -->
 <div class="container py-5">
         <!-- Basic text -->
@@ -33,10 +50,19 @@
                         <!-- set the name label form to the character's name -->
                         <h2> {{ form.name.label(text=game.characters[c_num].name) }} </h2>
 
+                        <!-- Display the image if it exists -->
+                    {% if game.characters[c_num].image %}
+    <img src="{{ url_for('static', filename=game.characters[c_num].image.replace('\\', '/')) }}"
+         alt="{{ game.characters[c_num].name }}"
+         class="img-fluid mb-3"
+         style="max-height: 150px;">
+{% endif %}
+
                         <!-- Otherwise make it character's index + 1 for character number-->
                         {% else %}
                         <h2> {{ form.name.label(text='Character ' ~ (c_num + 1)) }} </h2>
                         {% endif %}
+
 
                         {{ render_form(form, novalidate=True, button_map={"submit": "tertiary mt-2"}) }}  <!-- Adjusted button class to use tertiary style -->
                     </div>
@@ -52,7 +78,7 @@
         </div>
     </div>
 </div>
-
+<h1>{{  (game.characters) }} </h1>
 <script src="{{ url_for('static', filename='form-persistence.js') }}"></script>
 </body>
 </html>

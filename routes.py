@@ -1,4 +1,6 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
+from werkzeug.utils import secure_filename
+
 from forms import InputCharacter, NextEvent, CharacterAmount
 from logic import *
 
@@ -12,9 +14,13 @@ def init_routes(app):
         characters = get_characters() # Fetch the character list
 
         if request.method == 'POST':
-            # TODO: replace the check for winner with a function in game logic
             if check_for_winner():
-                winner = get_living_characters()[0]
+                # if everybody is dead, pass in a message saying everybody died
+                try:
+                    winner = get_living_characters()[0]
+                except IndexError:
+                    winner = None
+
                 return render_template("winner.html", form=form, winner=winner)
 
             displayed_events = generate_event()
@@ -25,6 +31,8 @@ def init_routes(app):
 
     @app.route('/')
     def home():
+        reset_game()
+        print("Welcome")
         return render_template("index.html")
 
     @app.route('/reset')
@@ -38,6 +46,7 @@ def init_routes(app):
         if request.method == 'POST':
             if form.validate_on_submit():
                 game.character_amount = form.amount.data
+                print(game.character_amount)
                 create_character_slots(game.character_amount)
                 return redirect(url_for('choose_characters'))  # Redirect to choose_characters
 
@@ -47,17 +56,56 @@ def init_routes(app):
     def choose_characters():
         """Handle character creation and editing."""
         forms = [InputCharacter() for _ in range(game.character_amount)]  # Create the forms
-        character_to_render = get_characters()  # Fetch the character list
+        messages = []
 
         # Handle form submission
         if request.method == 'POST':
             for form in forms:
                 if form.validate_on_submit():
-                    create_edit_character(form)  # Create or edit character that was submitted
-            return redirect(url_for('choose_characters'))  # Redirect after processing all forms
+                    name = form.name.data  # get the character name from the form
+                    index = int(form.slot.data)  # get the character slot from the form
+                    image = form.image.data
+                    print(image)
+
+                    # if there is an image to save
+                    if image:
+                        filename = secure_filename(form.image.data.filename) # gets filename
+
+                        # creates filepaths
+                        filepath_save = os.path.join('static', 'character_uploads', filename)
+                        filepath_pass = os.path.join('character_uploads', filename)
+
+                        # should save image in a non-corrupted way
+                        image.seek(0)
+                        image.save(filepath_save)
+                        print(filepath_save)
+                        print(f"Filepath Pass {filepath_pass}")
+                        create_edit_character(name=name,index=index,image=filepath_pass)
+
+
+                    # if it's a duplicate name, return error
+                    elif check_if_duplicate(name,index):
+                        messages.append(('error', f'Error: Character name "{name}" already exists.'))
+
+                    # if it's otherwise a valid name, create/edit character
+                    else:
+                        create_edit_character(name,index)  # Create or edit character that was submitted
+                        messages.append(('success', f'Character "{name}" successfully created/edited.'))
+
+            # flashes success or error message
+            for category, message in set(messages):
+                flash(message, category)
+
+            # Redirect after processing all forms
+            return redirect(url_for('choose_characters'))
 
         # Render the form page for a GET request
         return render_template("choose_characters.html", forms=forms, game=game)
+
+
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('404.html'), 404
 
 
     return app
