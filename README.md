@@ -42,7 +42,7 @@
   - Use BrantSteele's Hunger Games as reference for what quality of life features to add
 
 ### 2024-09-03 - Involving AI
-- **Implemented**: Added AI generated events that consider character health and items
+- **Implemented**: Added ability to upload images, and try/except to catch bugs
 - **Challenges**: Images were not displaying, turns out they were being corrupted when uploaded because cursor was at the end of the file
 - **Learned**: 
   - Uploading images via WTForms
