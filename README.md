@@ -40,3 +40,14 @@
   - System prompt still needs to be adjusted
   - Need to start adjusting quality of life, making the game replayable, adding images of characters
   - Use BrantSteele's Hunger Games as reference for what quality of life features to add
+
+### 2024-09-03 - Involving AI
+- **Implemented**: Added AI generated events that consider character health and items
+- **Challenges**: Images were not displaying, turns out they were being corrupted when uploaded because cursor was at the end of the file
+- **Learned**: 
+  - Uploading images via WTForms
+- **Next Steps**:
+  - Make UI cleaner
+  - A few more quality of life features
+  - Refine system prompt
+  - For the most part, the website is done and ready for deployment, there's just a few things to fix to make it more professional and fun
